@@ -1,0 +1,10 @@
+All of the files in these subfolders need to be labeled sequentially. That means that you CANNOT just go 
+and delete any file that you feel like. If you must delete a file, please run the included 'delete_file.py' 
+script so that the problems remain correctly numbered for the random problem generator.
+
+Likewise, if you would like to insert a file, use the included 'insert_file.py' script. This is useful for
+keeping the textbook problems in order as they appear in the text, and for keeping the problems that we 
+write for the non-textbook and additional problems in a relatively nice order.
+
+IMPORTANT NOTE: for the solution environment to work, you have to move\begin{solution} and \end{solution}
+onto their own line, and they have to be all the way to the left

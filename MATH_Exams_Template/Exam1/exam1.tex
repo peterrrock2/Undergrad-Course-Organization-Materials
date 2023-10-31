@@ -1,0 +1,35 @@
+\documentclass[addpoints]{exam}[14pt]
+
+\usepackage{soul}
+\usepackage{exam-randomizechoices}
+
+
+\input{Resources/exam_preamble.tex}
+
+% Keep these all in one place to prevent typos
+\newcommand{\CLASS}{MATH 2400}
+\newcommand{\DATE}{February 13, 2023}
+\newcommand{\EXAM}{Midterm 1}
+\newcommand{\DURATION}{90 minutes}
+
+%change the exam version for multiple choice
+\newcommand{\VERSION}{2}
+
+
+\setrandomizerseed{\VERSION}
+
+\pgfplotsset{samples=50} % Draft quality (faster compiling)
+%\pgfplotsset{samples=2500} % High quality
+
+\printanswerstrue  % UNCOMMENT TO SEE ANSWERS
+
+\begin{document}
+
+\input{Resources/front_page.tex}
+\begin{questions}
+\input{Problems/MC.tex}
+\input{Problems/FR.tex}
+\end{questions}
+
+
+\end{document}

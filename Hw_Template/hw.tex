@@ -1,0 +1,88 @@
+% Most of the code for the generation of this file is contained in the 
+% preamble. See the note at the top of the preamble for details
+
+\input{preamble.tex}
+
+%==================================================
+%   COURSE ASSISTANT CHANGE THE LINES BELOW!!!
+%==================================================
+% ATTN: COURSE ASSISTANT needs to change this every semester
+
+% This is so you can set the random seed manually
+% KEEP TRACK OF THE RANDOM SEED SO THAT YOU CAN PRINT OUT THE ANSWERS
+\newcommand\RandomSeedNumber{2} % edit the seed here
+
+% Make sure that there are enough files in the associated directories
+% before setting these values. If you try to include more files than
+% are available, tex will throw an error. The total number of problems
+% available to choose from are stored in the variables \thenumNonTextbookFiles,
+% \thenumTextbookFiles, and \thenumAddFiles
+
+\newcommand\numNonTextbookProblems{4} % number of problems from /Problems/Non_Textbook
+\newcommand\numTextbookProblems{4} % number of problems from /Problems/Textbook
+\newcommand\numAdditionalProblems{\thenumAddFiles} % number of problems from /Problems/Additional_Problems
+
+% Finally, as you generate solution sets, you can print the answers using the boolean below.
+% Just comment out the line that you don't want
+\printanswerstrue
+\printanswersfalse
+
+
+%==================================================
+%            END OF LINES TO EDIT
+%==================================================
+
+
+% This is the part that actually sets the random seed
+\ExplSyntaxOn
+\sys_gset_rand_seed:n {\RandomSeedNumber}
+\ExplSyntaxOff
+
+% Generates a random subset of the sizes we defined above
+% These lists are printed in order according to their position
+\setrandomsubsetofrange{non_text_files}{\numNonTextbookProblems}[1]{\thenumNonTextbookFiles}
+\setrandomsubsetofrange{text_files}{\numTextbookProblems}[1]{\thenumTextbookFiles}
+\setrandomsubsetofrange{additional_files}{\numAdditionalProblems}[1]{\thenumAddFiles}
+
+\ifprintanswers
+%
+\else
+\excludecomment{solution}
+\fi
+
+%==================================================
+%               MAIN DOCUMENT
+%==================================================
+
+
+\begin{document}
+\lhead{University of Colorado-Boulder}
+\rhead{\bf MATH 2400 Homework Template}
+
+\noindent\textbf{Turn in the following problems:}
+\begin{enumerate}
+  \userandomsubsetofrange{non_text_files}{\item \input{\pathToNonTextbook#1.tex}\vspace{1.5em}}
+  \setcounter{enumcount}{\value{enumi}}
+\end{enumerate}
+
+\noindent \textbf{Textbook Problems (also must be turned in)}
+\begin{enumerate}
+  \setcounter{enumi}{\value{enumcount}}
+  \userandomsubsetofrange{text_files}{\item \input{\pathToTextbook#1.tex}\vspace{1.5em}}
+  \setcounter{enumcount}{\value{enumi}}
+\end{enumerate}
+
+\noindent\textbf{These problems will not be collected, but you are expected to solve them. You might need the solutions during the semester:}
+\begin{enumerate}
+  \setcounter{enumi}{\value{enumcount}}
+  \userandomsubsetofrange{additional_files}{\item \input{\pathToAdditional#1.tex}\vspace{1.5em}}
+  \setcounter{enumcount}{\value{enumi}}
+\end{enumerate}
+
+\begin{center}
+	\textbf{\emph{Optional Challenge Problems}}
+\end{center}
+% Just type in a list here for now. In the future, these will all be typed.
+There are no optional challenge problems on this assignment.
+
+\end{document}

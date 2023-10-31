@@ -1,0 +1,41 @@
+\documentclass[letterpaper,11pt]{article}
+\usepackage{amsmath, mathtools, comment, graphicx, fancyhdr, color, setspace, comment, multicol, hyperref, listings}
+\usepackage[letterpaper,margin=1in,includehead=true]{geometry}
+\usepackage{amssymb,MnSymbol}
+\usepackage{amsthm}
+
+
+\newif\ifprintanswers
+  
+\newenvironment{solution}
+  {\flushleft\color{blue}\textbf{Solution:}}
+  {}
+
+
+
+\begin{document}
+
+\noindent No need to put the question statement here. Just say what problem this is for (e.g. additional problem 1)
+
+\begin{solution} Put the full solution here. Maybe with an equation
+    \[a^2 + b^2 = c^2\]
+Please do not define custom commands. So to make $\mathbb{R}$ you need to type \texttt{\textbackslash mathbb\{R\}}.
+
+%======================
+%    RUBRIC
+%======================
+
+\textbf{Rubric:}
+\begin{table}[h!]
+    \centering
+    \color{blue}
+    \begin{tabular}{|p{0.25in}|p{5in}|}
+        \hline
+        0 & No Attempt. \\ \hline
+        1 & Attempt made. You may or may not put things here \\ \hline
+        2 & Mostly there. Say what distinguishes this from a 1. What is the ``leap'' in the problem? \\ \hline
+        3 & Correct. Say what distinguishes this from a 2, and what sort of mistakes are allowed to still receive full credit. \\ \hline
+    \end{tabular}
+\end{table}
+\end{solution}
+\end{document}

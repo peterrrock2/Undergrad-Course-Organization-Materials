@@ -1,0 +1,193 @@
+% Template Author: Peter Rock
+% Last Modified 29 December 2022
+
+% This file makes use of a number of macros and some randomizer code
+% to make modifications to future assignments easier. If the tex is not
+% compiling, check to make sure that the commands \pathToNonTextbook and
+% \pathToTextbook are correct at the bottom of the preamble
+
+
+
+\documentclass[letterpaper,11pt]{article}
+\usepackage{amsmath, mathtools, comment, graphicx, fancyhdr, color, setspace, comment, multicol, hyperref}
+\usepackage[letterpaper,margin=1in,includehead=true]{geometry}
+\pagestyle{fancy}
+\usepackage{enumitem}
+\usepackage{tikz,tikz-3dplot,pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{soul}
+\usepackage{amssymb,MnSymbol}
+\usepackage{amsthm}
+\usepackage{tcolorbox}
+\usepackage{latexsym}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage[none]{hyphenat}
+\usepackage{xcolor}
+\usepackage{comment}
+
+
+\setlength{\headheight}{15pt}%needed to remove fancyhdr error--not crucial%
+
+
+\renewcommand\vec{\mathbf}
+
+
+% ======================================================================
+%                  CODE FOR RANDOM QUESTION SELECTION
+% ======================================================================
+%enable the latex3 coding language
+\ExplSyntaxOn
+
+\seq_new:N \l__me_random_seq
+\int_new:N \l__me_items_int
+\int_new:N \l__me_length_int
+
+\msg_new:nnn { me } { range-too-small }
+  { range~ [#2,~#3]~ too~ small~ for~ random~ list~ with~ #1~ elements }
+\msg_new:nnn { me } { unknown-seq } { no~ seq~ with~ name~ #1~ defined }
+
+\cs_new_protected:Npn \__me_set_random_seq:nnn #1#2#3
+  {
+    % #1: number of subset elements
+    % #2: start of range
+    % #3: end of range
+    \int_set:Nn \l__me_items_int {#1}
+    \int_set:Nn \l__me_length_int { #3 - (#2) + \c_one_int }
+    \seq_clear:N \l__me_random_seq
+    \int_compare:nNnT \l__me_items_int > \l__me_length_int
+      {
+        \msg_error:nnxxx { me } { range-too-small }
+          { \int_eval:n{#1} }
+          { \int_eval:n{#2} }
+          { \int_eval:n{#3} }
+      }
+    % build a sorted sequence with the full range
+    \int_step_inline:nnn {#2} {#3}
+      { \seq_put_right:Nn \l__me_random_seq {##1} }
+    % remove the extra items (randomly)
+    \int_step_inline:nnnn
+      \l__me_length_int
+      { -1 }
+      { \l__me_items_int + \c_one_int }
+      {
+        \seq_pop_item:NnN
+          \l__me_random_seq { \int_rand:n {##1} } \l_tmpa_tl
+      }
+    % result is sorted
+  }
+
+\cs_new_protected:Npn \me_loop_random_seq:nnnn #1#2#3#4
+  {
+    % #1: number of subset elements
+    % #2: start of range
+    % #3: end of range
+    % #4: code to do on each element
+    \__me_set_random_seq:nnn {#1} {#2} {#3}
+    \seq_map_inline:Nn \l__me_random_seq {#4}
+  }
+\NewDocumentCommand \loopoverrandomsubsetofrange { m O{1} m +m }
+  { \me_loop_random_seq:nnnn {#1} {#2} {#3} {#4} }
+
+\cs_new_protected:Npn \me_set_named_random_seq:nnnn #1#2#3#4
+  {
+    % #1: name
+    % #2: number of subset elements
+    % #3: start of range
+    % #4: end of range
+    \__me_set_random_seq:nnn {#2} {#3} {#4}
+    \seq_clear_new:c { l__me_ #1 _random_seq }
+    \seq_set_eq:cN { l__me_ #1 _random_seq } \l__me_random_seq
+  }
+\NewDocumentCommand \setrandomsubsetofrange { m m O{1} m }
+  { \me_set_named_random_seq:nnnn {#1} {#2} {#3} {#4} }
+
+\cs_new_protected:Npn \me_loop_named_random_seq:nn #1#2
+  {
+    \seq_if_exist:cTF { l__me_ #1 _random_seq }
+      { \seq_map_inline:cn { l__me_ #1 _random_seq } {#2} }
+      { \msg_error:nnn { me } { unknown-seq } {#1} }
+  }
+\NewDocumentCommand \userandomsubsetofrange { m +m }
+  { \me_loop_named_random_seq:nn {#1} {#2} }
+
+\ExplSyntaxOff
+
+
+\newcommand\randomincludefile[2]
+{%
+% #1: list name
+% #2: name before numbering system
+\userandomsubsetofrange{#1}{\input{#2##1.tex}}%
+}
+
+
+
+
+% ======================================================================
+%                  SETUP FOR THE PROBLEMS
+% ======================================================================
+
+
+%paths are taken relative to the main file
+\newcommand{\pathToNonTextbook}{Problems/Non\_Textbook/non_text_problem}
+\newcommand{\pathToTextbook}{Problems/Textbook/text_problem}
+\newcommand{\pathToAdditional}{Problems/Additional_Problems/add_problem}
+
+\newcounter{numNonTextbookFiles}
+\newcounter{numTextbookFiles}
+\newcounter{numAddFiles}
+
+
+
+%the next few lines count the number of available non-textbook problems
+\setcounter{numNonTextbookFiles}{1}
+
+\newboolean{stopNT}
+\whiledo{\NOT\boolean{stopNT}}{
+  \stepcounter{numNonTextbookFiles}
+  \IfFileExists{\pathToNonTextbook\thenumNonTextbookFiles.tex}{}{
+    \addtocounter{numNonTextbookFiles}{-1}
+    \setboolean{stopNT}{true}
+  }
+}
+
+
+%the next few lines count the number of available textbook problems
+\setcounter{numTextbookFiles}{1}
+
+\newboolean{stopT}
+\whiledo{\NOT\boolean{stopT}}{
+  \stepcounter{numTextbookFiles}
+  \IfFileExists{\pathToTextbook\thenumTextbookFiles.tex}{}{
+    \addtocounter{numTextbookFiles}{-1}
+    \setboolean{stopT}{true}
+  }
+}
+
+
+%the next few lines count the number of available additional problems
+\setcounter{numAddFiles}{1}
+
+\newboolean{stopA}
+\whiledo{\NOT\boolean{stopA}}{
+  \stepcounter{numAddFiles}
+  \IfFileExists{\pathToAdditional\thenumAddFiles.tex}{}{
+    \addtocounter{numAddFiles}{-1}
+    \setboolean{stopA}{true}
+  }
+}
+
+%counter to keep track of the number of problems 
+%only used so the enumerate environments behave
+\newcounter{enumcount}
+
+% ======================================================================
+%                  THINGS TO HIDE AND SHOW SOLUTIONS
+% ======================================================================
+
+\newif\ifprintanswers
+  
+\newenvironment{solution}
+  {\color{blue}\textbf{Solution:}}
+  {}

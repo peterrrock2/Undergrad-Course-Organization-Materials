@@ -1,0 +1,150 @@
+README for Math Exams
+Last Updated: 31 Oct 2023
+Author: Peter Rock
+Edited By: Peter Rock
+
+
+
+This project is set up to contain all the material that you need to make the exams for the 
+semester. Below is a detailed account of what each file within this project contains, and how 
+to set up the entire project for the semester
+
+Note: This project was made with Overleaf's file dynamics in mind. Using this on your personal
+computer may require some additional editing
+
+================================================================================================
+                                     BEGINNING OF SEMESTER
+================================================================================================
+
+Access the file named "frontpage.tex" inside of the Resources folder, and add or edit each of 
+the lines to include all of the sections. For example, if you wanted to add section 002 taught
+by Peter Rock from 8:00 - 8:50, you would add the following line to the tabular environment:
+
+$\square$ & Section 002 & Peter Rock   & 8:00am - 8:50am \\
+
+After editing the front page, make sure to go through each of the "exam*.tex" files in the Exam
+folders to edit the lines for the class, date, exam number, and duration. Here is an example
+from Exam 1:
+
+\newcommand{\CLASS}{MATH 2400}
+\newcommand{\DATE}{February 13, 2023}
+\newcommand{\EXAM}{Midterm 1}
+\newcommand{\DURATION}{90 minutes}
+
+
+================================================================================================
+                                 ADDING QUESTIONS TO EXAMS
+================================================================================================
+
+Each of the exams is sequestered in its own folder. Within each of the exam folders, you will
+find a "Graphics" folder for storing all of the images needed to generate the exam and a 
+"Problems" folder for holding the *.tex files containing all of the problems on the exam. 
+There is a Multiple Choice file labeled "MC.tex" and a Free Response file labeled "FR.tex" 
+within this folder, the purpose of which should be clear.
+
+
+
+                             +++++++++++++++++++++++++++++++
+                             ++ BASIC QUESTION FORMATTING ++
+                             +++++++++++++++++++++++++++++++
+
+Each question within the MC.tex and FR.tex files should be separated using the following set 
+of commented lines:
+%===========================================================
+%               QUESTION - By Author Name
+%===========================================================
+This helps the exam readers to both find the questions to make edits, and to identify who 
+made what questions on the exam so that we can delegate question editing.
+
+
+
+                                +++++++++++++++++++++
+                                ++ MULTIPLE CHOICE ++
+                                +++++++++++++++++++++
+
+All multiple-choice questions should begin with the following line:
+
+\question MULTIPLE CHOICE: Circle the correct answer. You do not need to show any work.
+
+Options on the multiple choice should then be enumerated using the choices environment with
+the correct choice being highlighted using the \correctchoice option. For example
+
+\begin{randomizechoices}
+\choice Thing 1
+\choice Thing 2
+\choice Thing 3
+\correctchoice Thing 4
+\end{randomizechoices}
+
+In this case, the fourth option will be highlighted as the correct choice when the line
+
+% \printanswerstrue  % UNCOMMENT TO SEE ANSWERS
+
+is uncommented in the exam document
+
+
+Of course, if you would like a little more control over the ordering of the choices in the 
+various versions of the exam, you can use if statements. Here is an example:
+
+\ifnum\VERSION=1
+\begin{choices}
+    \choice Thing 1
+    \choice Thing 2
+    \choice Thing 3
+    \correctchoice Thing 4
+\end{choices}
+\fi\ifnum\VERSION=2
+\begin{choices}
+    \correctchoice Thing 4
+    \choice Thing 1
+    \choice Thing 3
+    \choice Thing 2
+\end{choices}
+\fi\ifnum\VERSION=3
+\begin{choices}
+    \choice Thing 3
+    \correctchoice Thing 4
+    \choice Thing 1
+    \choice Thing 2
+\end{choices}
+\fi
+
+
+                                +++++++++++++++++++
+                                ++ FREE RESPONSE ++
+                                +++++++++++++++++++
+
+All free response questions need to be proceeded by the \question[# of points]. So to make a 
+free response question worth 6 points, you would use
+
+\question[6] Text of the free response.
+
+If you desire to make a free response worth a total of 6 points, but with two parts worth 4
+points and 2 points respectively, note that you need to omit the points after \question
+and instead use the "parts" environment. For example
+
+\question Text of multi-part free response question worth 6 points total
+
+\begin{parts}
+\part[4] This is a part worth 4 points
+\part[2] This is a part worth 2 points
+\end{parts}
+
+As a helpful note, you may achieve some nice spacing using either \vfill or \vspace{space_size}
+between each part.
+
+
+                                  ++++++++++++++
+                                  ++ GRAPHICS ++
+                                  ++++++++++++++
+
+
+To include graphics, put your image in the "Graphics" folder and then use the command
+
+\includegraphics[]{Graphics/IMAGE_NAME}
+
+For example, the image in the example free response question was included using the following:
+
+\begin{center}
+    \includegraphics[scale = 0.5]{Graphics/example_graphic.jpg}
+\end{center}

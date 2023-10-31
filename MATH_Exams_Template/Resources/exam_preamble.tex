@@ -1,0 +1,59 @@
+\usepackage{amsmath,amssymb,amsthm,tikz,enumerate,pgfplots,tabulary,setspace,paralist}
+
+\usepackage{tikz,tikz-3dplot,pgfplots,mathtools, graphicx}
+\usepackage{latexsym}
+\usepackage{epsfig}
+\usepackage{amscd}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[export]{adjustbox}
+\usepackage{multicol}
+\usepackage{color}
+\usepackage{tikz-cd}
+\usepackage{tabularx}
+\usepackage{enumerate}
+\usepackage{exam-randomizechoices}
+\usepackage{enumitem,svg}
+\setlist[itemize]{leftmargin=*}
+
+\graphicspath{{Graphics/}}
+
+\usetikzlibrary{positioning,shapes,arrows}
+
+\pgfplotsset{soldot/.style={color=black,only marks,mark=*}} \pgfplotsset{holdot/.style={color=black,fill=white,only marks,mark=*}}
+
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\everymath{\displaystyle}
+
+\let\oldhat\hat
+\renewcommand{\hat}[1]{\oldhat{\mathbf{#1}}}
+\newcommand{\ihat}{\hat{\textbf{\i}}}
+\newcommand{\jhat}{\hat{\textbf{\j}}} 
+\newcommand{\khat}{\hat{\textbf{k}}} 
+
+\pagestyle{foot}
+\cfoot{Page \thepage\mbox{ of }\numpages} % page numbering
+\pagestyle{headandfoot}
+% \firstpageheader{\CLASS}{\EXAM}{\DATE\quad\bfseries{V\VERSION}}
+\firstpageheader{\CLASS}{\EXAM}{\DATE}
+\setlength{\textheight}{9.25in} \setlength{\voffset}{-0.2in}
+\def\blank{\underline{\hskip 1.5cm}}
+
+\pgfplotsset{compat = 1.18}
+\usepgfplotslibrary{fillbetween}
+
+\CorrectChoiceEmphasis{\color{blue}\bfseries}
+\unframedsolutions
+\AtBeginEnvironment{solution}{\color{blue}}
+
+
+% some junk to fix the rubric tables
+\let\oldtable\table
+\let\endoldtable\endtable
+\newif\ifinsidefloatingenv  %set boolean for 
+\insidefloatingenvfalse     %not necessary but to be sure its false
+
+\renewenvironment{table}[1][h]
+{\ifinner               \center \insidefloatingenvtrue     \else    \oldtable[#1]   \fi}
+{\ifinsidefloatingenv   \endcenter \insidefloatingenvfalse \else    \endoldtable    \fi}
